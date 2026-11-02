@@ -4,12 +4,12 @@ import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig(() => {
-  // Detect repository name dynamically:
-  // If in GitHub Actions for epkktech/EPinternship -> /EPinternship/
-  // Otherwise use relative './' which works on any host/domain/subpath
-  const base = process.env.GITHUB_REPOSITORY
-    ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}/`
-    : './';
+  const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1] ?? 'Epweb';
+  const isGitHubPages = !!process.env.GITHUB_ACTIONS;
+
+  // GitHub Pages project site uses /<repo-name>/ as the site base.
+  // Local/dev builds should still use relative asset paths.
+  const base = isGitHubPages ? `/${repoName}/` : './';
 
   return {
     base,
